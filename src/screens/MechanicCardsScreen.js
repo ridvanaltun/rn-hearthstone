@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 import {View, FlatList} from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {FlipCard} from '../components';
@@ -8,20 +8,27 @@ const MechanicCardsScreen = ({route, navigation}) => {
   const {cardsWithMechanics} = useContext(AppContext);
 
   // handle selected cards
-  const selectedCards = cardsWithMechanics.filter(item => {
-    let filterResult = false;
-    item.mechanics.forEach(mechanic => {
-      if (mechanic.name === mechanicName) {
-        filterResult = true;
-      }
+  // we are using memoization because this calculation
+  // ...doesn't need to re-run after in any state change
+  const cards = useMemo(() => {
+    const selectedCards = cardsWithMechanics.filter(item => {
+      let filterResult = false;
+      item.mechanics.forEach(mechanic => {
+        if (mechanic.name === mechanicName) {
+          filterResult = true;
+        }
+      });
+
+      return filterResult;
     });
-    return filterResult;
-  });
+
+    return selectedCards;
+  }, [cardsWithMechanics, mechanicName]);
 
   return (
     <View>
       <FlatList
-        data={selectedCards}
+        data={cards}
         initialNumToRender={4}
         windowSize={6}
         onEndReachedThreshold={0.5}
