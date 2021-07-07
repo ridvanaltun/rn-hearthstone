@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,53 +8,8 @@ import {
   FlatList,
 } from 'react-native';
 import axios from 'axios';
-import {Enums} from '../constants';
 import {FlipCard} from '../components';
-
-const fetchSearchData = (query, cancelToken) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'GET',
-      url: `https://${Enums.SECRETS.RAPIDAPI_HOST}/cards/search/${query}`,
-      headers: {
-        'x-rapidapi-key': Enums.SECRETS.RAPIDAPI_KEY,
-        'x-rapidapi-host': Enums.SECRETS.RAPIDAPI_HOST,
-      },
-      cancelToken: cancelToken.token,
-    })
-      .then(response => {
-        // check request errors
-        if (response.status === 404) {
-          reject(new Error('No card found!'));
-        } else if (response.status !== 200) {
-          reject(new Error('Promise chain cancelled'));
-        }
-
-        return response;
-      })
-      .then(response => {
-        // returns response body as json object
-        return response.data;
-      })
-      .then(json => {
-        // eleminate cards type
-        const cardsPool = Object.values(json);
-
-        // remove empty arrays which coming from empty card types
-        const reducer = (acc, currValue) => acc.concat(currValue);
-        const cards = cardsPool.reduce(reducer, []);
-
-        resolve(cards);
-      })
-      .catch(err => {
-        if (axios.isCancel(err)) {
-          console.log('Request canceled', err.message);
-        } else {
-          reject(err);
-        }
-      });
-  });
-};
+import {SearchCard} from '../api';
 
 const CardSearchScreen = ({navigation}) => {
   const [searchedCards, setSearchedCards] = useState([]);
@@ -63,6 +18,17 @@ const CardSearchScreen = ({navigation}) => {
   const [error, setError] = useState(null);
   const [errorText, setErrorText] = useState('');
   const [lastSearchCancelSource, setLastSearchCancelSource] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      // prevent memory leak, cancel asynchronous tasks
+      if (lastSearchCancelSource) {
+        lastSearchCancelSource.cancel(
+          'Operation canceled because component will unmount.',
+        );
+      }
+    };
+  });
 
   const handleSearch = txt => {
     setSearchText(txt);
@@ -93,7 +59,7 @@ const CardSearchScreen = ({navigation}) => {
     newSearchCancelSource = axios.CancelToken.source();
     setLastSearchCancelSource(newSearchCancelSource);
 
-    fetchSearchData(txt, newSearchCancelSource)
+    SearchCard(txt, newSearchCancelSource)
       .then(cards => {
         setSearchedCards(cards);
         setIsLoading(false);

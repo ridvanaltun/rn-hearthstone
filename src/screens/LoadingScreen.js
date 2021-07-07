@@ -1,11 +1,19 @@
-import React, {useEffect, useContext} from 'react';
-import axios from 'axios';
-import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import {AppContext} from '../context/AppContext';
-import {Theme, Enums} from '../constants';
+import {Theme} from '../constants';
+import {AllCards} from '../api';
 
 const LoadingScreen = ({navigation}) => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const {setCardsWithMechanics} = useContext(AppContext);
+
   const getUniqueMechanicsFrom = function (data) {
     let uniqueMechanicsNames = [];
 
@@ -21,52 +29,47 @@ const LoadingScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // The screen is focused
-      axios({
-        method: 'GET',
-        url: `https://${Enums.SECRETS.RAPIDAPI_HOST}/cards`,
-        headers: {
-          'x-rapidapi-key': Enums.SECRETS.RAPIDAPI_KEY,
-          'x-rapidapi-host': Enums.SECRETS.RAPIDAPI_HOST,
-        },
+    // fetch all cards
+    AllCards()
+      .then(cardsWithMechanics => {
+        setCardsWithMechanics(cardsWithMechanics);
+        return getUniqueMechanicsFrom(cardsWithMechanics);
       })
-        .then(response => {
-          // returns response body as json object
-          return response.data;
-        })
-        .then(json => {
-          // eleminate cards type
-          const cardsPool = Object.values(json);
+      .then(mechanicsNames => {
+        navigation.push('Home', {mechanicsNames});
+      })
+      .catch(error => {
+        setErrorMessage(error.message || 'An error occured!');
+      });
+  }, [errorMessage, navigation, setCardsWithMechanics]);
 
-          // remove empty arrays which coming from empty card types
-          const reducer = (acc, currValue) => acc.concat(currValue);
-          const cards = cardsPool.reduce(reducer, []);
+  const _onRefreshPress = () => {
+    setErrorMessage(null);
+  };
 
-          return cards;
-        })
-        .then(cards => {
-          // returns cards which has mechanics
-          return cards.filter(card => !!card.mechanics);
-        })
-        .then(cardsWithMechanics => {
-          setCardsWithMechanics(cardsWithMechanics);
-          return getUniqueMechanicsFrom(cardsWithMechanics);
-        })
-        .then(mechanicsNames => {
-          navigation.push('Home', {mechanicsNames});
-        })
-        .catch(error => console.error(error));
-    });
+  const renderError = () => {
+    return (
+      <>
+        <Text>{errorMessage}</Text>
+        <TouchableOpacity style={styles.button} onPress={_onRefreshPress}>
+          <Text>Refresh</Text>
+        </TouchableOpacity>
+      </>
+    );
+  };
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, [navigation, setCardsWithMechanics]);
+  const renderLoading = () => {
+    return (
+      <>
+        <ActivityIndicator size={150} color={Theme.COLORS.WHITE} />
+        <Text style={styles.txtLoading}>Mechanics are loading...</Text>
+      </>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={150} color={Theme.COLORS.WHITE} />
-      <Text style={styles.txtLoading}>Mechanics are loading...</Text>
+      {errorMessage ? renderError() : renderLoading()}
     </View>
   );
 };
@@ -82,6 +85,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
     fontSize: 24,
     color: Theme.COLORS.WHITE,
+  },
+  button: {
+    backgroundColor: Theme.COLORS.WHITE,
+    padding: 10,
+    marginTop: 20,
   },
 });
 
