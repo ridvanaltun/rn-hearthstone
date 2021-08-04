@@ -12,6 +12,7 @@ import type {Node} from 'react';
 import {LogBox} from 'react-native';
 import AppNavigator from './src/navigations';
 import AppContextProvider from './src/context/AppContext';
+import codePush from 'react-native-code-push';
 import _ from 'lodash';
 
 const App: () => Node = () => {
@@ -34,4 +35,4 @@ const App: () => Node = () => {
   );
 };
 
-export default App;
+export default codePush(App);

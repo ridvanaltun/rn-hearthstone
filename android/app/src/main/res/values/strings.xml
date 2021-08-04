@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Hearthstone Cards</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">GDrcmMj9R0cJ6axrTFIvilKkRmntP1hzeuKmX</string>
 </resources>
