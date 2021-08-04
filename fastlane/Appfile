@@ -1,0 +1,2 @@
+apple_id("ridvanaltun@outlook.com")
+ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "generate-app-specific-password-from-appleid.apple.com"
