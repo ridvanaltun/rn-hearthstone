@@ -1,4 +1,4 @@
-package com.ridvanaltun.hearthstonecards;
+package com.ridvanaltun.cardcollection;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "HearthstoneCards";
+    return "CardCollection";
   }
 }

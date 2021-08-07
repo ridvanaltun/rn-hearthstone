@@ -142,7 +142,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ridvanaltun.hearthstonecards"
+        applicationId "com.ridvanaltun.cardcollection"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -10,32 +10,32 @@ end
 platform :ios do
   desc "Determine a new version number by looking at Plist file"
   private_lane :update_version do
-    app_store_version = get_app_store_version_number(bundle_id: "com.ridvanaltun.hearthstonecards")
-    plist_version = get_version_number_from_plist(xcodeproj: "./ios/HearthstoneCards.xcodeproj")
+    app_store_version = get_app_store_version_number(bundle_id: "com.ridvanaltun.cardcollection")
+    plist_version = get_version_number_from_plist(xcodeproj: "./ios/CardCollection.xcodeproj")
     if Gem::Version.new(plist_version.to_f) == Gem::Version.new(app_store_version.to_f)
       UI.message "bumping minor"
-      increment_version_number_in_plist(xcodeproj: "./ios/HearthstoneCards.xcodeproj", bump_type: "minor")
+      increment_version_number_in_plist(xcodeproj: "./ios/CardCollection.xcodeproj", bump_type: "minor")
     else
       UI.message "bumping patch"
-      increment_version_number_in_plist(xcodeproj: "./ios/HearthstoneCards.xcodeproj", bump_type: "patch")
+      increment_version_number_in_plist(xcodeproj: "./ios/CardCollection.xcodeproj", bump_type: "patch")
     end
   end
 
   desc "iOS build for beta track"
   private_lane :staging_build do
-    increment_build_number_in_plist(xcodeproj: "./ios/HearthstoneCards.xcodeproj", target: "HearthstoneCards")
-    gym(scheme: "HearthstoneCards-staging", workspace: "./ios/HearthstoneCards.xcworkspace")
+    increment_build_number_in_plist(xcodeproj: "./ios/CardCollection.xcodeproj", target: "CardCollection")
+    gym(scheme: "CardCollection-staging", workspace: "./ios/CardCollection.xcworkspace")
   end
 
   desc "iOS build for release"
   private_lane :release_build do
-    increment_build_number_in_plist(xcodeproj: "./ios/HearthstoneCards.xcodeproj", target: "HearthstoneCards")
-    gym(scheme: "HearthstoneCards-release", workspace: "./ios/HearthstoneCards.xcworkspace")
+    increment_build_number_in_plist(xcodeproj: "./ios/CardCollection.xcodeproj", target: "CardCollection")
+    gym(scheme: "CardCollection-release", workspace: "./ios/CardCollection.xcworkspace")
   end
 
   desc "Push version changes to remote Git repository"
   private_lane :push_new_version do
-    current_version = get_version_number(xcodeproj: "./ios/HearthstoneCards.xcodeproj", target: "HearthstoneCards")
+    current_version = get_version_number(xcodeproj: "./ios/CardCollection.xcodeproj", target: "CardCollection")
     commit_version_bump(message: `build(ios): bump build to ${current_version}`)
     push_to_git_remote
   end
@@ -45,7 +45,7 @@ platform :ios do
     staging_build
     upload_to_testflight(
       username: "ridvanaltun@outlook.com", # come from Appfile already?
-      app_identifier: "com.ridvanaltun.hearthstonecards",
+      app_identifier: "com.ridvanaltun.cardcollection",
     )
     push_new_version
   end
@@ -91,9 +91,9 @@ end
 
 desc "Deploy a CodePush build to current version for iOS"
 lane :codepush_ios do |options|
-  codepush_target = "ridvaltun/HearthstoneCards-iOS"
+  codepush_target = "ridvaltun/CardCollection-iOS"
   codepush_channel = "Production"
-  current_version = get_version_number(xcodeproj: "./ios/HearthstoneCards.xcodeproj", target: "HearthstoneCards")
+  current_version = get_version_number(xcodeproj: "./ios/CardCollection.xcodeproj", target: "CardCollection")
   codepush(
     current_version: current_version,
     codepush_target: codepush_target,
@@ -104,7 +104,7 @@ end
 
 desc "Deploy a CodePush build to current version for Android"
 lane :codepush_android do |options|
-  codepush_target = "ridvaltun/HearthstoneCards-Android"
+  codepush_target = "ridvaltun/CardCollection-Android"
   codepush_channel = "Production"
   current_version = google_play_track_release_names
   codepush(
@@ -136,8 +136,8 @@ end
 
 desc "Select a platform to distribute CodePush build"
 private_lane :select_app_platform do
-  codepush_target_ios= "ridvaltun/HearthstoneCards-iOS"
-  codepush_target_android= "ridvaltun/HearthstoneCards-Android"
+  codepush_target_ios= "ridvaltun/CardCollection-iOS"
+  codepush_target_android= "ridvaltun/CardCollection-Android"
   target_platform = UI.select("What platform do you want to target?", [
     "iOS",
     "Android",

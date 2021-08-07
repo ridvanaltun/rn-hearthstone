@@ -1,4 +1,4 @@
-# React Native Hearthstone
+# Card Collection
 
 It is a reference project to use for Fastlane.
 
