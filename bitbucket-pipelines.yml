@@ -1,0 +1,15 @@
+#  Template NodeJS build
+
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: node:10.15.3
+
+pipelines:
+  branches:
+    main:
+    - step:
+        name: Dispatch GitHub Action
+        script:
+          - echo 'Dispatching GitHub Action'
+          - curl -d "{\"event_type\":\"start-example-workflow\"}" -H "Authorization:Bearer $GITHUB_TOKEN" -X POST https://api.github.com/repos/ridvanaltun/gh-action-test/dispatches
