@@ -1,5 +1,6 @@
 before_all do
-  ensure_git_branch # ensure current branch is master
+  # ensure current branch is main
+  ensure_git_branch(branch: 'main')
   ensure_git_status_clean # ensure every local changes committed
   git_pull # pull down any changes on remote branch
 end
