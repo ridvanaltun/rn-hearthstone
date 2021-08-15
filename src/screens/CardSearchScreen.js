@@ -93,6 +93,8 @@ const CardSearchScreen = ({navigation}) => {
       <View>
         <FlatList
           data={searchedCards}
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
           initialNumToRender={4}
           windowSize={6}
           onEndReachedThreshold={0.5}
@@ -104,7 +106,7 @@ const CardSearchScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.textInputContainer}>
       <TextInput
         style={styles.input}
         onChangeText={queryText => handleSearch(queryText)}
@@ -117,6 +119,9 @@ const CardSearchScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 20,
+  },
+  textInputContainer: {
     flex: 1,
     marginTop: 30,
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import React, {useContext, useMemo} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {FlipCard} from '../components';
 
@@ -29,6 +29,8 @@ const MechanicCardsScreen = ({route, navigation}) => {
     <View>
       <FlatList
         data={cards}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
         initialNumToRender={4}
         windowSize={6}
         onEndReachedThreshold={0.5}
@@ -38,5 +40,11 @@ const MechanicCardsScreen = ({route, navigation}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 20,
+  },
+});
 
 export default MechanicCardsScreen;

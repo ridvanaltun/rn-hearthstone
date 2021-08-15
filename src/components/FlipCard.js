@@ -9,6 +9,15 @@ import {
 } from 'react-native';
 import {Computed, Images} from '../constants';
 
+const PropTitle = ({title, prop}) => {
+  return (
+    <Text>
+      <Text style={[styles.title]}>{`${title}: `}</Text>
+      <Text style={[styles.prop]}>{`${prop || '?'}`}</Text>
+    </Text>
+  );
+};
+
 const FlipCard = ({card}) => {
   let animatedValue = new Animated.Value(0);
   let val = 0;
@@ -91,13 +100,13 @@ const FlipCard = ({card}) => {
             {opacity: backOpacity},
           ]}>
           <View style={[styles.flipCard, styles.flipCardBackContext]}>
-            <Text>{`Card Type: ${card.type || '?'}`}</Text>
-            <Text>{`Card Rarity: ${card.rarity || '?'}`}</Text>
-            <Text>{`Card Cost: ${card.cost || '?'}`}</Text>
-            <Text>{`Card Set: ${card.cardSet || '?'}`}</Text>
-            <Text>{`Card Attack: ${card.attack || '?'}`}</Text>
-            <Text>{`Card Race: ${card.race || '?'}`}</Text>
-            <Text>{`Card Player Class: ${card.playerClass || '?'}`}</Text>
+            <PropTitle title="Card Type" prop={card.type} />
+            <PropTitle title="Card Rarity" prop={card.rarity} />
+            <PropTitle title="Card Cost" prop={card.cost} />
+            <PropTitle title="Card Set" prop={card.cardSet} />
+            <PropTitle title="Card Attack" prop={card.attack} />
+            <PropTitle title="Card Race" prop={card.race} />
+            <PropTitle title="Card Player Class" prop={card.playerClass} />
           </View>
         </Animated.View>
         <Text style={styles.cardName}>{card.name}</Text>
@@ -121,10 +130,20 @@ const styles = StyleSheet.create({
   },
   flipCardBackContext: {
     position: 'absolute',
-    paddingTop: 100,
-    left: 10,
+    padding: 20,
+    borderWidth: 1,
   },
   cardName: {
+    marginTop: 15,
+    marginBottom: 30,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  prop: {
     fontSize: 20,
   },
 });
