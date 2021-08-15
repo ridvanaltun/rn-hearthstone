@@ -52,7 +52,7 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
-release-manager.json
+play-store-credentials.json
 
 # Bundle artifact
 *.jsbundle

@@ -7,6 +7,7 @@
     "android:release": "cd ./android && ./gradlew bundleRelease && cd ..",
     "ios": "react-native run-ios",
     "pod-install": "cd ./ios && pod install && cd ..",
+    "retrieve-google-play-metadata": "bundle exec fastlane supply init",
     "deploy:android": "bundle exec fastlane android production",
     "deploy:android-beta": "bundle exec fastlane android beta",
     "deploy:ios": "bundle exec fastlane ios production",
