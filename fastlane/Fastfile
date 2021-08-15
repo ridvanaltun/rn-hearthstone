@@ -1,6 +1,5 @@
 before_all do
-  # ensure current branch is main
-  ensure_git_branch(branch: 'main')
+  ensure_git_branch(branch: 'main') # ensure current branch is main
   ensure_git_status_clean # ensure every local changes committed
   git_pull # pull down any changes on remote branch
 end
@@ -68,7 +67,7 @@ platform :android do
 
   desc "Android build and release to Internal App Sharing (Beta Track)"
   lane :beta do
-    increment_version_code(app_project_dir: "./android/app")
+    increment_version_code(gradle_file_path: "./android/app/build.gradle")
     gradle(task: "clean", project_dir: "./android/")
     gradle(task: "bundle", build_type: "Release", project_dir: "./android")
     supply(
@@ -81,8 +80,8 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :production do
-    increment_version_code(app_project_dir: "./android/app")
-    increment_version_name(app_project_dir: "./android/app", bump_type: "patch")
+    increment_version_code(gradle_file_path: "./android/app/build.gradle")
+    increment_version_name(gradle_file_path: "./android/app/build.gradle", bump_type: "patch")
     gradle(task: "clean", project_dir: "./android/")
     gradle(task: "bundle", build_type: "Release", project_dir: "./android")
     supply(track: "production", aab: "./android/app/build/outputs/bundle/release/app-release.aab", release_status: "draft")
