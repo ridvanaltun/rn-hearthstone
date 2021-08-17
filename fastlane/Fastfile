@@ -30,8 +30,8 @@ end
 platform :android do
   desc "Generate release notes for the Play Store"
   private_lane :release_notes_playstore do
-    releaseNotesBody = File.read("./android/version/release-notes")
-    releaseNotesSuffix = File.read("./android/version/release-notes-suffix")
+    releaseNotesBody = File.read("../android/version/release-notes")
+    releaseNotesSuffix = File.read("../android/version/release-notes-suffix")
 
     formatted = "#{releaseNotesBodyHeader}\n#{releaseNotesBody}\n#{releaseNotesSuffixHeader}\n#{releaseNotesSuffix}"
     UI.message("\n#{formatted}")
@@ -47,7 +47,7 @@ platform :android do
     UI.message("App version for fastlane is #{current_version_code}.\nRelease notes for Play Store:\n\n#{releaseNotes}")
 
     releaseNotesLocales.each do |locale|
-      File.open("./fastlane/metadata/android/#{locale}/changelogs/#{current_version_code}.txt", "w") do |file| file.write("#{releaseNotes}") end
+      File.open("./metadata/android/#{locale}/changelogs/#{current_version_code}.txt", "w") do |file| file.write("#{releaseNotes}") end
     end
   end
 
@@ -70,7 +70,7 @@ platform :android do
       merge_commit_filtering: "exclude_merges",
     )
 
-    existingReleaseNotes = File.read("./android/version/release-notes")
+    existingReleaseNotes = File.read("../android/version/release-notes")
     UI.important("Existing release notes:\n")
     UI.message("#{existingReleaseNotes}\n")
     choice = UI.select "What do you want to do for release notes?", ["KEEP EXISTING", "CUSTOM",
@@ -104,12 +104,12 @@ platform :android do
       sh "git flow release start #{newVersion}"
 
       # update new release
-      File.open("./android/version/version.properties", "w") do |file|
+      File.open("../android/version/version.properties", "w") do |file|
         file.write("VERSION=#{newVersion}")
       end
 
       # update release notes
-      File.open("./android/version/release-notes", "w") do |file|
+      File.open("../android/version/release-notes", "w") do |file|
         file.write("" "#{releaseNotes}" "")
       end
 
