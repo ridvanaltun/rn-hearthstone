@@ -74,7 +74,7 @@ platform :android do
     UI.important("Existing release notes:\n")
     UI.message("#{existingReleaseNotes}\n")
     choice = UI.select "What do you want to do for release notes?", ["KEEP EXISTING", "CUSTOM",
-                                                                     "Bug fixes and other improvements"]
+                                                                     "Bug fixes and other improvements."]
 
     rl = case choice
       when "KEEP EXISTING"
@@ -122,8 +122,14 @@ platform :android do
         )
 
         sh "git flow release finish -mnFS '#{newVersion}' '#{newVersion}'"
+
+        # push new version tag
         push_git_tags
+
+        # push new production branch
         sh "git push origin #{productionBranch}"
+
+        # push new development branch
         sh "git push origin #{developmentBranch}"
 
         UI.header("#{newVersion} tag has been successfully created. 🎉")
