@@ -15,49 +15,22 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
-### codepush_ios
-```
-fastlane codepush_ios
-```
-Deploy a CodePush build to current version for iOS
-### codepush_android
-```
-fastlane codepush_android
-```
-Deploy a CodePush build to current version for Android
-### codepush
-```
-fastlane codepush
-```
-Distribute a CodePush build
-
-----
-
-## iOS
-### ios beta
-```
-fastlane ios beta
-```
-Push a new beta build to TestFlight
-### ios production
-```
-fastlane ios production
-```
-Deploy a new version to the App Store
-
-----
-
 ## Android
+### android release
+```
+fastlane android release
+```
+Create new release
 ### android beta
 ```
 fastlane android beta
 ```
-Android build and release to Internal App Sharing (Beta Track)
+Build and Deploy to Internal App Sharing
 ### android production
 ```
 fastlane android production
 ```
-Deploy a new version to the Google Play
+Build and Deploy a new version to the Google Play
 
 ----
 

@@ -1,0 +1,5 @@
+Bu sürümdeki yenilikler neler?
+Hata düzeltmeleri ve diğer iyileştirmeler.
+
+Geri bildiriminiz var mı?
+Bize her zaman https://ridvanaltun.vercel.app/#contact adresinden ulaşabilirsiniz.

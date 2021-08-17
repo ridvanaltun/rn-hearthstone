@@ -1,7 +1,11 @@
-apple_id("ridvanaltun@outlook.com")
-ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "generate-app-specific-password-from-appleid.apple.com"
+# The Appfile can be used to specify information that's used across all fastlane
+# tools, like your username or the app's bundle identifier.
+#
+# For more details, check out the documentation at:
+# https://docs.fastlane.tools/advanced/Appfile/#appfile
 
 # for supply plugin (handle google play releases, test and production)
 # store play-store-credentials.json file root because we run fastlane from root
+# @see https://docs.fastlane.tools/actions/supply/#setup
 json_key_file("play-store-credentials.json")
 package_name("com.ridvanaltun.cardcollection")
