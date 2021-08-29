@@ -62,3 +62,6 @@ play-store-credentials.json
 
 # Environments
 .env
+
+# Linter
+.eslintcache
